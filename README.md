@@ -1,56 +1,70 @@
-# demo-repo[updated by local repo]
-
-hello I have edited this in cloud
-
-
 package com.cts.assessment.controller;
 
 import com.cts.assessment.entity.Employee;
 import com.cts.assessment.service.EmployeeService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.Optional;
 
-@RestController
-@RequestMapping("/employee")
-@RequiredArgsConstructor
-@Slf4j
-public class EmployeeController {
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-    private final EmployeeService employeeService;
+@WebMvcTest(EmployeeController.class)
+class EmployeeControllerTest {
 
-    @GetMapping("/getEmployee/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable Long id) {
-        log.info("Fetching employee with ID: {}", id);
-        return ResponseEntity.ok(employeeService.getEmployeeById(id));
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private EmployeeService employeeService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private Employee employee;
+
+    @BeforeEach
+    void setUp() {
+        employee = new Employee();
+        employee.setId(123456L);
+        employee.setName("John Doe");
+        employee.setDepartmentId(10L);
     }
 
-    @PostMapping("/getEmployeeByDepartmentId")
-    public ResponseEntity<List<Employee>> getEmployeeByDepartment(@RequestBody Long departmentId) {
-        log.info("Fetching employees for department ID: {}", departmentId);
-        return ResponseEntity.ok(employeeService.getEmployeesByDepartmentId(departmentId));
+    @Test
+    void testGetEmployee_ValidId_ShouldReturnEmployee() throws Exception {
+        when(employeeService.getEmployeeById(123456L)).thenReturn(employee);
+
+        mockMvc.perform(get("/employee/getEmployee/123456"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("John Doe"));
     }
 
-    @PostMapping("/addEmployee")
-    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee employee) {
-        log.info("Adding new employee: {}", employee.getName());
-        return ResponseEntity.ok(employeeService.addEmployee(employee));
+    @Test
+    void testGetEmployee_InvalidId_ShouldReturn400() throws Exception {
+        mockMvc.perform(get("/employee/getEmployee/1234")) // Invalid ID (not 6 digits)
+                .andExpect(status().isBadRequest());
     }
 
-    @PutMapping("/editEmployee")
-    public ResponseEntity<Employee> editEmployee(@Valid @RequestBody Employee employee) {
-        log.info("Editing employee: {}", employee.getId());
-        return ResponseEntity.ok(employeeService.editEmployee(employee));
-    }
+    @Test
+    void testGetEmployeeByDepartment_ValidDepartmentId_ShouldReturnEmployees() throws Exception {
+        when(employeeService.getEmployeesByDepartmentId(10L)).thenReturn(Arrays.asList(employee));
 
-    @DeleteMapping("/deleteEmployee/{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
-        log.info("Deleting employee with ID: {}", id);
-        employeeService.deleteEmployee(id);
-        return ResponseEntity.ok("Employee deleted successfully.");
+        mockMvc.perform(post("/employee/getEmployeeByDepartmentId")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(10L)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
     }
 }
