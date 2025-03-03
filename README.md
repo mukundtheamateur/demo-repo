@@ -1,11 +1,11 @@
 package com.cts.assessment.controller;
 
 
-curl -X POST -H "Content-Type: application/json" -d '{"id": 1, "name": "TD"}' http://localhost:8080/department/addDepartment
 curl: (3) URL rejected: Bad hostname
 curl: (3) URL rejected: Port number was not a decimal number between 0 and 65535
 curl: (3) unmatched close brace/bracket in URL position 3:
 TD}'
+
 
 
 
