@@ -1,5 +1,15 @@
 package com.cts.assessment.controller;
 
+
++ curl -X POST -H "Content-Type: application/json" -d '{"id": 1, "name" ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Invoke-WebRequest], ParameterBindingException
+    + FullyQualifiedErrorId : CannotConvertArgumentNoMessage,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+
+
+
+
+
 import com.cts.assessment.entity.Employee;
 import com.cts.assessment.service.EmployeeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
