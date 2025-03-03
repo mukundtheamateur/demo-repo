@@ -1,11 +1,9 @@
 package com.cts.assessment.controller;
 
-curl -X POST -H "Content-Type: application/json" -d '{"id": 1,"name": "TD"}' http://localhost:8080/department/addDepartment
-curl: (3) URL rejected: Port number was not a decimal number between 0 and 65535
-curl: (3) unmatched close brace/bracket in URL position 3:
-TD}'
-  ^
 
+org.hibernate.StaleObjectStateException: Row was updated or deleted by another transaction (or unsaved-value mapping was incorrect): [com.cts.assessment.entity.Department#1]
+	at org.hibernate.event.internal.DefaultMergeEventListener.entityIsDetached(DefaultMergeEventListener.java:426) ~[hibernate-core-6.6.8.Final.jar:6.6.8.Final]
+	at or
 
 
 
