@@ -1,65 +1,14 @@
-    public EmployeeDTO editEmployee(Employee employee) {
-        if (!employeeRepository.existsById(employee.getId())) {
-            throw new EmployeeNotFoundException("Employee not found with ID: " + employee.getId());
+2025-03-05T19:06:25.133+05:30  WARN 19596 --- [assessment] [nio-8080-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingPathVariableException: Required URI template variable 'employeeId' for method parameter type Integer is not present]
+
+@DeleteMapping("/deleteEmployee/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable Integer employeeId) {
+         log.info("Deleting employee with ID: {}", employeeId);
+        employeeService.deleteEmployee(employeeId);
+        return ResponseEntity.ok("Employee deleted successfully.");
+    }
+public void deleteEmployee(Integer employeeId) {
+        if (employeeRepository.findByEmployeeId(employeeId).isEmpty()) {
+            throw new EmployeeNotFoundException("Employee not found with ID: " + employeeId);
         }
-        
-        return new EmployeeDTO(employeeRepository.save(employee));
+        employeeRepository.deleteById(employeeId);
     }
-
-package com.cts.assessment.dto;
-
-import com.cts.assessment.entity.Employee;
-import lombok.Data;
-
-@Data
-public class EmployeeDTO {
-    private int employeeId;
-    private String name;
-    private int age;
-    private String departmentName;
-
-    //constructor
-    public EmployeeDTO(Employee employee){
-        this.employeeId = employee.getEmployeeId();
-        this.age = employee.getAge();
-        this.name = employee.getName();
-        this.departmentName = employee.getDepartment().getName();
-    }
-}
-
-package com.cts.assessment.entity;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-
-
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-
-public class Employee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    private int employeeId;
-
-    @NotBlank(message = "Employee name is required")
-    private String name;
-
-    @Min(value = 18, message = "Age must be at least 18")
-    private int age;
-
-    @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
-    @JsonBackReference
-    private Department department;
-
-}
-
-please fix my editEmployee method, I need to use Put mapping and need to update the employee
