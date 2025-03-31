@@ -1,85 +1,51 @@
-package com.cts.batchapp;
+1. Productivity
+Deliverables:
 
-import com.cts.batchapp.config.BatchConfig;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+Complete assigned development tasks within the estimated timeline.
 
-@Slf4j
-@SpringBootApplication
-public class BatchappApplication implements ApplicationRunner {
+Maintain an average of 15 to 20 story points completed per sprint.
 
-	@Autowired
-	private BatchConfig batchConfig;
+Respond to and resolve assigned bugs/issues within the expected SLA.
 
-	public static void main(String[] args) {
-		SpringApplication.run(BatchappApplication.class, args);
-	}
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		if(args.containsOption("jobName")){
-			String jobName = args.getOptionValues("jobName").get(0);
-			performJob(jobName);
-		}
-		else{
-			log.info("There is no argument present, so we can't run the cron jobs");
-		}
-	}
-	public void performJob(String jobName) throws Exception {
-		batchConfig.job(jobName);
+Actively participate in daily stand-ups, sprint planning, and retrospective meetings.
 
-	}
+2. Design & Development
+Deliverables:
 
-}
+Write clean, maintainable, and well-documented code following best practices.
 
-package com.cts.batchapp.task;
+Implement at least one new feature or enhancement per sprint.
 
-import org.springframework.stereotype.Component;
+Contribute to code reviews with constructive feedback and suggestions.
 
-@Component
-public class PrintHelloTask{
+Ensure code follows team guidelines, including unit testing and version control standards.
 
+Develop a basic understanding of system architecture and participate in design discussions.
 
-    public void execute(String jobName) throws Exception {
-        System.out.println("runnig task: Hello, jobName= "+ jobName);
-    }
-}
+3. Process Adherence
+Deliverables:
 
-package com.cts.batchapp.config;
+Follow Agile/Scrum or Kanban defined software development methodologies.
 
-import com.cts.batchapp.task.PrintHelloTask;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
+Adhere to coding standards, branching strategies (Git), and commit message guidelines.
 
-@EnableScheduling
-@Configuration
-@Slf4j
-public class BatchConfig {
+Log work progress in project tracking tools (e.g., Jira, Azure DevOps, Confluence).
 
-    private int count=0;
+Document key learnings, technical challenges, and solutions in team knowledge base.
 
-    @Autowired
-    private PrintHelloTask printHelloTask;
+Actively collaborate with peers, testers, and senior developers to ensure smooth development cycles.
 
-    @Scheduled(cron = "0 * * * *")
-    @Bean
-    public void job(String jobName) throws Exception {
-        log.info("Running jobName: "+ jobName + " , count = "+ count++);
-        printHelloTask.execute(jobName);
-    }
+4. Training & Skill Development
+Deliverables:
 
+Complete at least one technical training or certification per quarter.
 
-}
-tell me what is wrong and why I can't do mvn clean install also, I'm trying to use Spring Scheduler and tried to create a cron job, also if you have any better coding example and approach please tell me that. Please give me answer in detail. 
+Work on a personal or team-led learning project to enhance coding and problem-solving skills.
 
+Participate in knowledge-sharing sessions within the team.
+
+Seek mentorship from senior developers and incorporate feedback into development work.
+
+Stay updated with industry trends, best practices, and emerging technologies.
+
+Regarding skill development, I generally tell the team members to decide on the training and learning they are interested in. However, training/learning must align with your goals.
